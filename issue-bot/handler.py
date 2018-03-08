@@ -19,7 +19,7 @@ def handle(req):
         return
 
     # Call sentimentanalysis
-    res = requests.post('http://' + gateway_hostname + ':8080/function/sentimentanalysis', 
+    res = requests.post('http://' + gateway_hostname + ':8080/function/iyovcheva-sentimentanalysis', 
                         data= payload["issue"]["title"]+" "+payload["issue"]["body"])
 
     if res.status_code != 200:
