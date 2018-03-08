@@ -19,7 +19,7 @@ def handle(req):
         return
 
     # Call sentimentanalysis
-    res = requests.post('http://' + gateway_hostname + ':8080/function/helloworld')
+    res = requests.post('http://git-cloud.openfaas.com:8080/function/helloworld')
 
     if res.status_code != 200:
         print("Error with sentimentanalysis, expected: %d, got: %d\n" % (200, res.status_code))
