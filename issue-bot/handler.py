@@ -23,6 +23,7 @@ def handle(req):
 
     if res.status_code != 200:
         print("Error with sentimentanalysis, expected: %d, got: %d\n" % (200, res.status_code))
+        print(res)
         sys.exit(1)
     
     print(res)
