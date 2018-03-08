@@ -18,6 +18,8 @@ functions:
     environment_file:
     - env.yml
   sentimentanalysis:
+    lang: python
+    handler: ./sentimentanalysis
     image: functions/sentimentanalysis
     envProcess: python ./handler.py
     network: func_functions
