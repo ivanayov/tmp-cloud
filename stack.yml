@@ -17,3 +17,7 @@ functions:
       positive_threshold: 0.25
     environment_file:
     - env.yml
+  sentimentanalysis:
+    image: functions/sentimentanalysis
+    envProcess: python ./handler.py
+    network: func_functions
