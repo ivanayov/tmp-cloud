@@ -7,3 +7,13 @@ functions:
     lang: python
     handler: ./helloworld
     image: docwareiy/helloworld
+  issue-bot:
+    lang: python
+    handler: ./issue-bot
+    image: docwareiy/issue-bot
+    environment:
+      write_debug: true
+      gateway_hostname: "gateway"
+      positive_threshold: 0.25
+    environment_file:
+    - env.yml
