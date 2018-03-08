@@ -17,3 +17,7 @@ functions:
       positive_threshold: 0.25
     environment_file:
     - env.yml
+  sentimentanalysis:
+    lang: python
+    handler: ./sentimentanalysis
+    image: docwareiy/sentimentanalysis
