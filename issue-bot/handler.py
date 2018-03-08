@@ -19,42 +19,41 @@ def handle(req):
         return
 
     # Call sentimentanalysis
-    res = requests.post('http://' + gateway_hostname + ':8080/function/iyovcheva-helloworld')
+    res = requests.post('http://' + gateway_hostname + ':8080/function/iyovcheva-sentimentanalysis', 
+                        data= payload["issue"]["title"]+" "+payload["issue"]["body"])
 
     if res.status_code != 200:
         print("Error with sentimentanalysis, expected: %d, got: %d\n" % (200, res.status_code))
         print(res)
         sys.exit(1)
     
-    print(res)
+    # Read the positive_threshold from configuration
+    positive_threshold = float(os.getenv("positive_threshold", "0.2"))
 
-#     # Read the positive_threshold from configuration
-#     positive_threshold = float(os.getenv("positive_threshold", "0.2"))
+    polarity = res.json()['polarity']
 
-#     polarity = res.json()['polarity']
+    # Call back to GitHub to apply a label
+    apply_label(polarity,
+        payload["issue"]["number"],
+        payload["repository"]["full_name"],
+        positive_threshold)
 
-#     # Call back to GitHub to apply a label
-#     apply_label(polarity,
-#         payload["issue"]["number"],
-#         payload["repository"]["full_name"],
-#         positive_threshold)
+    print("Repo: %s, issue: %s, polarity: %f" % (payload["repository"]["full_name"], payload["issue"]["number"], polarity))
 
-#     print("Repo: %s, issue: %s, polarity: %f" % (payload["repository"]["full_name"], payload["issue"]["number"], polarity))
+def apply_label(polarity, issue_number, repo, positive_threshold):
+    g = Github(os.getenv("auth_token"))
+    repo = g.get_repo(repo)
+    issue = repo.get_issue(issue_number)
 
-# def apply_label(polarity, issue_number, repo, positive_threshold):
-#     g = Github(os.getenv("auth_token"))
-#     repo = g.get_repo(repo)
-#     issue = repo.get_issue(issue_number)
+    has_label_positive = False
+    has_label_review = False
+    for label in issue.labels:
+        if label == "positive":
+            has_label_positive = True
+        if label == "review":
+            has_label_review = True
 
-#     has_label_positive = False
-#     has_label_review = False
-#     for label in issue.labels:
-#         if label == "positive":
-#             has_label_positive = True
-#         if label == "review":
-#             has_label_review = True
-
-#     if polarity > positive_threshold and not has_label_positive:
-#         issue.set_labels("positive")
-#     elif not has_label_review:
-#         issue.set_labels("review")
+    if polarity > positive_threshold and not has_label_positive:
+        issue.set_labels("positive")
+    elif not has_label_review:
+        issue.set_labels("review")
