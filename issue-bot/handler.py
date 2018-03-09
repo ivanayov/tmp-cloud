@@ -30,6 +30,11 @@ def handle(req):
     # Read the positive_threshold from configuration
     positive_threshold = float(os.getenv("positive_threshold", "0.2"))
 
+    if not is_json(res.json()):
+        print("Not valid resut from sentiment analysis")
+        print(res)
+        sys.exit(1)
+
     polarity = res.json()['polarity']
 
     # Call back to GitHub to apply a label
