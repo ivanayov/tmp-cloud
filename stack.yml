@@ -21,3 +21,5 @@ functions:
     lang: python
     handler: ./sentimentanalysis
     image: docwareiy/sentimentanalysis
+    environment:
+      write_debug: true

@@ -30,4 +30,4 @@ if(__name__ == "__main__"):
     res["polarity"] = res["polarity"] / total
     res["subjectivity"] = res["subjectivity"] / total
 
-    print(res)
+    print(json.dumps(res))
