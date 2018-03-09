@@ -25,6 +25,7 @@ def handle(req):
     if res.status_code != 200:
         print("Error with sentimentanalysis, expected: %d, got: %d\n" % (200, res.status_code))
         print(res)
+        print(res.text)
         sys.exit(1)
     
     # Read the positive_threshold from configuration
